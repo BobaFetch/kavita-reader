@@ -41,7 +41,7 @@ export function getNativeAllowedOrigins(env: KavitaEnv): readonly string[] {
         return;
       }
 
-      origins.add(`https://${host}`);
+      origins.add(new URL(`https://${host}`).origin);
     });
 
   return [...origins];

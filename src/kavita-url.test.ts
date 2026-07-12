@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { assertKavitaUrlAllowedByNativeConfig, getKavitaUrl, normalizeKavitaUrl } from './kavita-url';
+import { assertKavitaUrlAllowedByNativeConfig, getKavitaUrl, getNativeAllowedOrigins, normalizeKavitaUrl } from './kavita-url';
 
 describe('normalizeKavitaUrl', () => {
   it('trims whitespace and removes trailing slash', () => {
@@ -46,6 +46,14 @@ describe('assertKavitaUrlAllowedByNativeConfig', () => {
     expect(assertKavitaUrlAllowedByNativeConfig('http://kavita.example.com/', {
       VITE_KAVITA_URL: 'http://kavita.example.com/',
     })).toBe('http://kavita.example.com');
+  });
+});
+
+describe('getNativeAllowedOrigins', () => {
+  it('normalizes allow-list entries without explicit schemes to origins', () => {
+    expect(getNativeAllowedOrigins({
+      VITE_CAPACITOR_ALLOW_NAVIGATION: 'kavita.example.com/, files.example.com/library',
+    })).toEqual(['https://kavita.example.com', 'https://files.example.com']);
   });
 });
 
