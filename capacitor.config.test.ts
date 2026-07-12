@@ -5,4 +5,8 @@ describe('Capacitor config', () => {
   it('starts from the bundled app instead of a direct server URL', () => {
     expect(config.server).not.toHaveProperty('url');
   });
+
+  it('does not default to wildcard native navigation without explicit opt-in', () => {
+    expect(config.server?.allowNavigation).toEqual([]);
+  });
 });

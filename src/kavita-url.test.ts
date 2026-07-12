@@ -10,6 +10,14 @@ describe('normalizeKavitaUrl', () => {
     expect(normalizeKavitaUrl('https://kavita.example.com')).toBe('https://kavita.example.com');
   });
 
+  it('repairs a missing colon in an https URL', () => {
+    expect(normalizeKavitaUrl('https//reader.example.com')).toBe('https://reader.example.com');
+  });
+
+  it('defaults a bare host to https', () => {
+    expect(normalizeKavitaUrl('reader.example.com')).toBe('https://reader.example.com');
+  });
+
   it('rejects an empty URL', () => {
     expect(() => normalizeKavitaUrl('')).toThrow('Kavita URL is required');
   });
@@ -47,6 +55,31 @@ describe('assertKavitaUrlAllowedByNativeConfig', () => {
       VITE_KAVITA_URL: 'http://kavita.example.com/',
     })).toBe('http://kavita.example.com');
   });
+
+  it('rejects arbitrary cleartext URLs when wildcard navigation is paired with a cleartext Kavita origin', () => {
+    expect(() => assertKavitaUrlAllowedByNativeConfig('http://untrusted.example.com/', {
+      VITE_KAVITA_URL: 'http://kavita.example.com/',
+      VITE_CAPACITOR_ALLOW_NAVIGATION: '*',
+    })).toThrow('Kavita URL must match a native host allowed for this app build');
+  });
+
+  it('allows any normalized URL when native navigation uses a wildcard host mask', () => {
+    expect(assertKavitaUrlAllowedByNativeConfig('https://reader.example.net/', {
+      VITE_CAPACITOR_ALLOW_NAVIGATION: '*',
+    })).toBe('https://reader.example.net');
+  });
+
+  it('rejects cleartext URLs when native navigation uses a wildcard host mask', () => {
+    expect(() => assertKavitaUrlAllowedByNativeConfig('http://reader.example.net/', {
+      VITE_CAPACITOR_ALLOW_NAVIGATION: '*',
+    })).toThrow('Kavita URL must use https:// for this app build');
+  });
+
+  it('rejects runtime URLs when no native navigation hosts are configured', () => {
+    expect(() => assertKavitaUrlAllowedByNativeConfig('https://reader.example.net/', {})).toThrow(
+      'Kavita URL must match a native host allowed for this app build'
+    );
+  });
 });
 
 describe('getNativeAllowedOrigins', () => {
@@ -54,6 +87,10 @@ describe('getNativeAllowedOrigins', () => {
     expect(getNativeAllowedOrigins({
       VITE_CAPACITOR_ALLOW_NAVIGATION: 'kavita.example.com/, files.example.com/library',
     })).toEqual(['https://kavita.example.com', 'https://files.example.com']);
+  });
+
+  it('preserves wildcard host masks', () => {
+    expect(getNativeAllowedOrigins({ VITE_CAPACITOR_ALLOW_NAVIGATION: '*' })).toEqual(['*']);
   });
 });
 

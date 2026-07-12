@@ -31,6 +31,8 @@ VITE_CAPACITOR_ALLOW_NAVIGATION=example.cloudflareaccess.com
 
 `VITE_KAVITA_URL` is optional for startup now; it is used by native config to include the host in Capacitor `allowNavigation`. The app's runtime URL comes from the saved on-device setting and must match a host allowed for that native build.
 
+For production builds, set `VITE_CAPACITOR_ALLOW_NAVIGATION` to the exact Kavita and external auth hosts that must stay inside the app. Use `VITE_CAPACITOR_ALLOW_NAVIGATION=*` only for runtime-configured builds that intentionally allow arbitrary Kavita hosts.
+
 ## Test And Build
 
 Run tests:
@@ -53,7 +55,7 @@ npm run cap:sync
 
 ## Android / Boox
 
-Android uses the system Back button to navigate backward inside the Kavita WebView before exiting the app. A small floating Reload button appears at the bottom-right of the app and reloads the current Kavita page.
+Android uses the system Back button to navigate backward inside the Kavita WebView before exiting the app. A small floating Reload button appears at the bottom-right of the app and reloads the current Kavita page. The app runs fullscreen on Android/Boox by hiding the status and navigation bars, with transient system bars where supported and a legacy immersive fallback.
 
 Build a debug APK from `android/` using Android Studio's bundled JBR:
 
@@ -83,7 +85,7 @@ Boox is Android v1 for this project.
 
 ## iOS
 
-iOS shows a bottom toolbar with Back and Reload controls for the Kavita WebView.
+iOS hides the status bar for a fullscreen reading surface while keeping the bottom toolbar with Back and Reload controls for the Kavita WebView.
 
 Open the iOS project in Xcode:
 

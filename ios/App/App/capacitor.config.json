@@ -3,10 +3,7 @@
 	"appName": "Kavita Mobile Shell",
 	"webDir": "dist",
 	"server": {
-		"allowNavigation": [
-			"kavita-library.example.dev",
-			"example.cloudflareaccess.com"
-		],
+		"allowNavigation": [],
 		"cleartext": false
 	},
 	"ios": {
