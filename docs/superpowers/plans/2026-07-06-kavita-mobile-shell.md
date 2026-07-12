@@ -279,7 +279,7 @@ describe('normalizeKavitaUrl', () => {
   });
 
   it('rejects an empty URL', () => {
-    expect(() => normalizeKavitaUrl('')).toThrow('VITE_KAVITA_URL is required');
+    expect(() => normalizeKavitaUrl('')).toThrow('Kavita URL is required');
   });
 
   it('rejects unsupported URL protocols', () => {
@@ -311,7 +311,7 @@ export function normalizeKavitaUrl(rawUrl: string | undefined): string {
   const trimmedUrl = rawUrl?.trim();
 
   if (!trimmedUrl) {
-    throw new Error('VITE_KAVITA_URL is required');
+    throw new Error('Kavita URL is required');
   }
 
   let parsedUrl: URL;
@@ -319,7 +319,7 @@ export function normalizeKavitaUrl(rawUrl: string | undefined): string {
   try {
     parsedUrl = new URL(trimmedUrl);
   } catch {
-    throw new Error('VITE_KAVITA_URL must be a valid URL');
+    throw new Error('Kavita URL must be a valid URL');
   }
 
   if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
@@ -527,7 +527,7 @@ export default config;
 
 Run: `npm run build && npx cap ls`
 
-Expected: `npm run build` passes, then `npx cap ls` fails with `VITE_KAVITA_URL is required`.
+Expected: `npm run build` passes, then `npx cap ls` fails with `Kavita URL is required`.
 
 - [ ] **Step 3: Create local `.env` from `.env.example`**
 

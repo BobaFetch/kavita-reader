@@ -1,0 +1,15 @@
+{
+	"appId": "local.kavita.mobile.shell",
+	"appName": "Kavita Mobile Shell",
+	"webDir": "dist",
+	"server": {
+		"allowNavigation": [
+			"kavita-library.example.dev",
+			"example.cloudflareaccess.com"
+		],
+		"cleartext": false
+	},
+	"ios": {
+		"contentInset": "always"
+	}
+}

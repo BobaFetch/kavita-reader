@@ -239,7 +239,7 @@ Expected: all commands pass.
 
 - [ ] **Step 1: Fresh install**
 
-Uninstall app from Boox: `/Users/bobafetch/Library/Android/sdk/platform-tools/adb uninstall local.kavita.mobile.shell`
+Uninstall app from Boox: `"$ANDROID_HOME/platform-tools/adb" uninstall local.kavita.mobile.shell`
 
 Expected: package removed.
 
