@@ -11,7 +11,7 @@ public class MainActivity extends BridgeActivity {
     super.onCreate(savedInstanceState);
 
     android.widget.Button reload = new android.widget.Button(this);
-    reload.setText("Reload");
+    reload.setText(getString(R.string.reload));
     reload.setOnClickListener((view) -> {
       WebView webView = getBridge().getWebView();
       if (webView != null) {
@@ -24,7 +24,8 @@ public class MainActivity extends BridgeActivity {
       android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
       android.view.Gravity.BOTTOM | android.view.Gravity.END
     );
-    params.setMargins(0, 0, 24, 24);
+    int margin = Math.round(24 * getResources().getDisplayMetrics().density);
+    params.setMargins(0, 0, margin, margin);
     addContentView(reload, params);
   }
 

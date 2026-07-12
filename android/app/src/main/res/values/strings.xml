@@ -4,4 +4,5 @@
     <string name="title_activity_main">Kavita Mobile Shell</string>
     <string name="package_name">local.kavita.mobile.shell</string>
     <string name="custom_url_scheme">local.kavita.mobile.shell</string>
+    <string name="reload">Reload</string>
 </resources>

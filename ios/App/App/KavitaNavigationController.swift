@@ -7,13 +7,15 @@ class KavitaNavigationController: CAPBridgeViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureContentView()
+        guard configureContentView() else {
+            return
+        }
         configureNavigationToolbar()
     }
 
-    private func configureContentView() {
+    private func configureContentView() -> Bool {
         guard let webView else {
-            return
+            return false
         }
 
         view = UIView(frame: view.frame)
@@ -35,13 +37,15 @@ class KavitaNavigationController: CAPBridgeViewController {
             webView.topAnchor.constraint(equalTo: contentView.topAnchor),
             webView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
+
+        return true
     }
 
     private func configureNavigationToolbar() {
         navigationToolbar.items = [
-            UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(goBack)),
+            UIBarButtonItem(title: NSLocalizedString("Back", comment: "Navigate back in the Kavita web view"), style: .plain, target: self, action: #selector(goBack)),
             UIBarButtonItem.flexibleSpace(),
-            UIBarButtonItem(title: "Reload", style: .plain, target: self, action: #selector(reloadPage)),
+            UIBarButtonItem(title: NSLocalizedString("Reload", comment: "Reload the current Kavita web view page"), style: .plain, target: self, action: #selector(reloadPage)),
         ]
 
         view.addSubview(navigationToolbar)
