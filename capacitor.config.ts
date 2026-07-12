@@ -6,11 +6,7 @@ const configuredKavitaUrl = process.env.VITE_KAVITA_URL?.trim()
   ? normalizeKavitaUrl(process.env.VITE_KAVITA_URL)
   : undefined;
 const parsedKavitaUrl = configuredKavitaUrl ? new URL(configuredKavitaUrl) : undefined;
-const extraNavigationHosts = process.env.VITE_CAPACITOR_ALLOW_NAVIGATION
-  ?.split(',')
-  .map((host) => host.trim())
-  .filter(Boolean) ?? [];
-const allowNavigation = [parsedKavitaUrl?.hostname, ...extraNavigationHosts].filter(
+const allowNavigation = [parsedKavitaUrl?.hostname].filter(
   (host): host is string => Boolean(host),
 );
 

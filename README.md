@@ -26,12 +26,9 @@ Configure `.env` from `.env.example` for native navigation allow-listing:
 
 ```env
 VITE_KAVITA_URL=https://kavita-library.example.dev/
-VITE_CAPACITOR_ALLOW_NAVIGATION=example.cloudflareaccess.com
 ```
 
 `VITE_KAVITA_URL` is optional for startup now; it is used by native config to include the host in Capacitor `allowNavigation`. The app's runtime URL comes from the saved on-device setting and must match a host allowed for that native build.
-
-For production builds, set `VITE_CAPACITOR_ALLOW_NAVIGATION` to the exact Kavita and external auth hosts that must stay inside the app. Use `VITE_CAPACITOR_ALLOW_NAVIGATION=*` only for runtime-configured builds that intentionally allow arbitrary Kavita hosts.
 
 ## Test And Build
 

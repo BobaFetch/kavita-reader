@@ -123,7 +123,6 @@ if (app) {
     store: Preferences,
     env: {
       VITE_KAVITA_URL: import.meta.env.VITE_KAVITA_URL,
-      VITE_CAPACITOR_ALLOW_NAVIGATION: import.meta.env.VITE_CAPACITOR_ALLOW_NAVIGATION,
     },
     navigate: (url) => {
       window.location.replace(url);

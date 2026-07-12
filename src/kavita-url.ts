@@ -1,6 +1,5 @@
 export type KavitaEnv = {
   readonly VITE_KAVITA_URL?: string;
-  readonly VITE_CAPACITOR_ALLOW_NAVIGATION?: string;
 };
 
 export function normalizeKavitaUrl(rawUrl: string | undefined): string {
@@ -38,23 +37,6 @@ export function getNativeAllowedOrigins(env: KavitaEnv): readonly string[] {
     origins.add(new URL(normalizeKavitaUrl(env.VITE_KAVITA_URL)).origin);
   }
 
-  env.VITE_CAPACITOR_ALLOW_NAVIGATION?.split(',')
-    .map((host) => host.trim())
-    .filter(Boolean)
-    .forEach((host) => {
-      if (host === '*') {
-        origins.add(host);
-        return;
-      }
-
-      if (host.startsWith('http://') || host.startsWith('https://')) {
-        origins.add(new URL(host).origin);
-        return;
-      }
-
-      origins.add(new URL(`https://${host}`).origin);
-    });
-
   return [...origins];
 }
 
@@ -76,10 +58,6 @@ export function assertKavitaUrlAllowedByNativeConfig(rawUrl: string, env: Kavita
 
   if (!allowedOrigins.length) {
     throw new Error('Kavita URL must match a native host allowed for this app build');
-  }
-
-  if (allowedOrigins.includes('*')) {
-    return kavitaUrl;
   }
 
   if (!allowedOrigins.includes(new URL(kavitaUrl).origin)) {
