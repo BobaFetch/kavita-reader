@@ -34,20 +34,16 @@ function escapeXmlAttribute(value) {
 
 export function buildConfigXml(origins) {
   const accessEntries = origins.map((origin) => `  <access origin="${escapeXmlAttribute(origin)}" />`).join('\n');
+  const accessBlock = accessEntries ? `\n${accessEntries}` : '';
 
   return `<?xml version='1.0' encoding='utf-8'?>
-<widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-${accessEntries}
+<widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">${accessBlock}
 </widget>
 `;
 }
 
 function main() {
   const origins = readAllowedOrigins();
-
-  if (!origins.length) {
-    throw new Error('No native navigation hosts are configured; refusing to generate wildcard Cordova access.');
-  }
 
   const configXml = buildConfigXml(origins);
 

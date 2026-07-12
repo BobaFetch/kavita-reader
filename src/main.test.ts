@@ -70,6 +70,23 @@ describe('renderUrlSettings', () => {
     expect(save).toHaveBeenCalledWith('https://kavita-library.example.dev/');
     expect(navigate).toHaveBeenCalledWith('https://kavita-library.example.dev');
   });
+
+  it('shows a user-facing error when saving the URL fails', async () => {
+    const root = document.createElement('div');
+    const save = vi.fn().mockRejectedValue(new Error('Kavita URL must be a valid URL'));
+    const navigate = vi.fn();
+
+    renderUrlSettings(root, { save, navigate });
+
+    const input = root.querySelector<HTMLInputElement>('input[name="kavitaUrl"]');
+    input!.value = 'http://';
+    root.querySelector<HTMLFormElement>('form')!.requestSubmit();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(root.textContent).toContain('Kavita URL must be a valid URL');
+    expect(navigate).not.toHaveBeenCalled();
+  });
 });
 
 describe('startKavitaShell', () => {

@@ -66,6 +66,7 @@ export function renderUrlSettings(root: HTMLElement, options: SettingsOptions): 
       <form class="panel form" aria-label="Kavita settings">
         <h1 class="title" id="settings-title">Kavita URL</h1>
         <p class="message">Enter the Kavita server URL to open in this app.</p>
+        <p class="message" role="alert" hidden></p>
         <label class="field">
           <span>Server URL</span>
           <input class="input" name="kavitaUrl" type="text" inputmode="url" required placeholder="https://kavita-library.example.dev" />
@@ -79,8 +80,17 @@ export function renderUrlSettings(root: HTMLElement, options: SettingsOptions): 
     event.preventDefault();
     const form = event.currentTarget as HTMLFormElement;
     const formData = new FormData(form);
-    const savedUrl = await options.save(String(formData.get('kavitaUrl') ?? ''));
-    options.navigate(savedUrl);
+    const errorMessage = form.querySelector<HTMLElement>('[role="alert"]');
+
+    try {
+      const savedUrl = await options.save(String(formData.get('kavitaUrl') ?? ''));
+      options.navigate(savedUrl);
+    } catch (error) {
+      if (errorMessage) {
+        errorMessage.textContent = error instanceof Error ? error.message : 'Unable to save Kavita URL';
+        errorMessage.hidden = false;
+      }
+    }
   });
 }
 
