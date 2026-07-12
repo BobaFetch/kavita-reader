@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getKavitaUrl, normalizeKavitaUrl } from './kavita-url';
+import { assertKavitaUrlAllowedByNativeConfig, getKavitaUrl, normalizeKavitaUrl } from './kavita-url';
 
 describe('normalizeKavitaUrl', () => {
   it('trims whitespace and removes trailing slash', () => {
@@ -11,11 +11,41 @@ describe('normalizeKavitaUrl', () => {
   });
 
   it('rejects an empty URL', () => {
-    expect(() => normalizeKavitaUrl('')).toThrow('VITE_KAVITA_URL is required');
+    expect(() => normalizeKavitaUrl('')).toThrow('Kavita URL is required');
+  });
+
+  it('rejects an invalid URL with user-facing wording', () => {
+    expect(() => normalizeKavitaUrl('not a url')).toThrow('Kavita URL must be a valid URL');
   });
 
   it('rejects unsupported URL protocols', () => {
     expect(() => normalizeKavitaUrl('ftp://kavita.example.com')).toThrow('Kavita URL must start with http:// or https://');
+  });
+});
+
+describe('assertKavitaUrlAllowedByNativeConfig', () => {
+  it('allows a URL that matches the configured Kavita origin', () => {
+    expect(assertKavitaUrlAllowedByNativeConfig('https://kavita.example.com/', {
+      VITE_KAVITA_URL: 'https://kavita.example.com/',
+    })).toBe('https://kavita.example.com');
+  });
+
+  it('rejects a URL outside the native allow-list', () => {
+    expect(() => assertKavitaUrlAllowedByNativeConfig('https://untrusted.example.com', {
+      VITE_KAVITA_URL: 'https://kavita.example.com/',
+    })).toThrow('Kavita URL must match a native host allowed for this app build');
+  });
+
+  it('rejects cleartext URLs unless the configured Kavita origin is cleartext', () => {
+    expect(() => assertKavitaUrlAllowedByNativeConfig('http://kavita.example.com', {
+      VITE_KAVITA_URL: 'https://kavita.example.com/',
+    })).toThrow('Kavita URL must match a native host allowed for this app build');
+  });
+
+  it('allows cleartext URLs when the configured Kavita origin is cleartext', () => {
+    expect(assertKavitaUrlAllowedByNativeConfig('http://kavita.example.com/', {
+      VITE_KAVITA_URL: 'http://kavita.example.com/',
+    })).toBe('http://kavita.example.com');
   });
 });
 

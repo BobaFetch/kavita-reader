@@ -1,5 +1,6 @@
 import './styles.css';
 import { Preferences } from '@capacitor/preferences';
+import type { KavitaEnv } from './kavita-url';
 import { getSavedKavitaUrl, saveKavitaUrl, type PreferenceStore } from './url-settings';
 
 type LauncherOptions = {
@@ -14,6 +15,7 @@ type SettingsOptions = {
 
 type ShellOptions = {
   readonly store: PreferenceStore;
+  readonly env?: KavitaEnv;
   readonly navigate: (url: string) => void;
 };
 
@@ -84,7 +86,7 @@ export function renderUrlSettings(root: HTMLElement, options: SettingsOptions): 
 
 export async function startKavitaShell(root: HTMLElement, options: ShellOptions): Promise<void> {
   try {
-    const kavitaUrl = await getSavedKavitaUrl(options.store);
+    const kavitaUrl = await getSavedKavitaUrl(options.store, options.env);
 
     if (kavitaUrl) {
       renderKavitaLauncher(root, { kavitaUrl, navigate: options.navigate });
@@ -92,7 +94,7 @@ export async function startKavitaShell(root: HTMLElement, options: ShellOptions)
     }
 
     renderUrlSettings(root, {
-      save: (url) => saveKavitaUrl(options.store, url),
+      save: (url) => saveKavitaUrl(options.store, url, options.env),
       navigate: options.navigate,
     });
   } catch (error) {
@@ -109,6 +111,10 @@ if (!app && import.meta.env.MODE !== 'test') {
 if (app) {
   void startKavitaShell(app, {
     store: Preferences,
+    env: {
+      VITE_KAVITA_URL: import.meta.env.VITE_KAVITA_URL,
+      VITE_CAPACITOR_ALLOW_NAVIGATION: import.meta.env.VITE_CAPACITOR_ALLOW_NAVIGATION,
+    },
     navigate: (url) => {
       window.location.replace(url);
     },

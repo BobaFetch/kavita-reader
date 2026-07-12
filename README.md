@@ -29,7 +29,7 @@ VITE_KAVITA_URL=https://kavita-library.example.dev/
 VITE_CAPACITOR_ALLOW_NAVIGATION=example.cloudflareaccess.com
 ```
 
-`VITE_KAVITA_URL` is optional for startup now; it is used by native config to include the host in Capacitor `allowNavigation`. The app's runtime URL comes from the saved on-device setting.
+`VITE_KAVITA_URL` is optional for startup now; it is used by native config to include the host in Capacitor `allowNavigation`. The app's runtime URL comes from the saved on-device setting and must match a host allowed for that native build.
 
 ## Test And Build
 
@@ -64,19 +64,19 @@ JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home" ./gradle
 Install the debug APK from the project root using the discovered Android SDK path:
 
 ```sh
-/Users/bobafetch/Library/Android/sdk/platform-tools/adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+"$ANDROID_HOME/platform-tools/adb" install -r android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
 If Boox disables the sideloaded package, enable it:
 
 ```sh
-/Users/bobafetch/Library/Android/sdk/platform-tools/adb shell pm enable local.kavita.mobile.shell
+"$ANDROID_HOME/platform-tools/adb" shell pm enable local.kavita.mobile.shell
 ```
 
 Launch the app activity:
 
 ```sh
-/Users/bobafetch/Library/Android/sdk/platform-tools/adb shell am start -n local.kavita.mobile.shell/.MainActivity
+"$ANDROID_HOME/platform-tools/adb" shell am start -n local.kavita.mobile.shell/.MainActivity
 ```
 
 Boox is Android v1 for this project.

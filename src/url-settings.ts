@@ -1,4 +1,4 @@
-import { normalizeKavitaUrl } from './kavita-url';
+import { assertKavitaUrlAllowedByNativeConfig, normalizeKavitaUrl, type KavitaEnv } from './kavita-url';
 
 export type PreferenceStore = {
   readonly get: (options: { readonly key: string }) => Promise<{ readonly value: string | null }>;
@@ -7,13 +7,13 @@ export type PreferenceStore = {
 
 export const KAVITA_URL_KEY = 'kavitaUrl';
 
-export async function getSavedKavitaUrl(store: PreferenceStore): Promise<string | null> {
+export async function getSavedKavitaUrl(store: PreferenceStore, env?: KavitaEnv): Promise<string | null> {
   const result = await store.get({ key: KAVITA_URL_KEY });
-  return result.value ? normalizeKavitaUrl(result.value) : null;
+  return result.value ? (env ? assertKavitaUrlAllowedByNativeConfig(result.value, env) : normalizeKavitaUrl(result.value)) : null;
 }
 
-export async function saveKavitaUrl(store: PreferenceStore, rawUrl: string): Promise<string> {
-  const value = normalizeKavitaUrl(rawUrl);
+export async function saveKavitaUrl(store: PreferenceStore, rawUrl: string, env?: KavitaEnv): Promise<string> {
+  const value = env ? assertKavitaUrlAllowedByNativeConfig(rawUrl, env) : normalizeKavitaUrl(rawUrl);
   await store.set({ key: KAVITA_URL_KEY, value });
   return value;
 }
