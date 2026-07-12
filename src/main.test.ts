@@ -61,6 +61,8 @@ describe('renderUrlSettings', () => {
     renderUrlSettings(root, { save, navigate });
 
     const input = root.querySelector<HTMLInputElement>('input[name="kavitaUrl"]');
+    expect(input?.type).toBe('text');
+    expect(input?.inputMode).toBe('url');
     input!.value = 'https://kavita-library.example.dev/';
     root.querySelector<HTMLFormElement>('form')!.requestSubmit();
     await Promise.resolve();

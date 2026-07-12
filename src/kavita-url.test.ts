@@ -10,6 +10,14 @@ describe('normalizeKavitaUrl', () => {
     expect(normalizeKavitaUrl('https://kavita.example.com')).toBe('https://kavita.example.com');
   });
 
+  it('repairs a missing colon in an https URL', () => {
+    expect(normalizeKavitaUrl('https//library-app.yonaka.dev')).toBe('https://library-app.yonaka.dev');
+  });
+
+  it('defaults a bare host to https', () => {
+    expect(normalizeKavitaUrl('library-app.yonaka.dev')).toBe('https://library-app.yonaka.dev');
+  });
+
   it('rejects an empty URL', () => {
     expect(() => normalizeKavitaUrl('')).toThrow('Kavita URL is required');
   });

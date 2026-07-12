@@ -68,7 +68,7 @@ export function renderUrlSettings(root: HTMLElement, options: SettingsOptions): 
         <p class="message">Enter the Kavita server URL to open in this app.</p>
         <label class="field">
           <span>Server URL</span>
-          <input class="input" name="kavitaUrl" type="url" required placeholder="https://kavita-library.example.dev" />
+          <input class="input" name="kavitaUrl" type="text" inputmode="url" required placeholder="https://kavita-library.example.dev" />
         </label>
         <div class="actions"><button class="button" type="submit">Save and Open</button></div>
       </form>
