@@ -1,14 +1,30 @@
 package local.kavita.mobile.shell;
 
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.webkit.WebView;
+import androidx.activity.OnBackPressedCallback;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+      @Override
+      public void handleOnBackPressed() {
+        WebView webView = getBridge().getWebView();
+
+        if (webView != null && webView.canGoBack()) {
+          webView.goBack();
+          return;
+        }
+
+        setEnabled(false);
+        getOnBackPressedDispatcher().onBackPressed();
+        setEnabled(true);
+      }
+    });
 
     android.widget.Button reload = new android.widget.Button(this);
     reload.setText(getString(R.string.reload));
@@ -29,15 +45,4 @@ public class MainActivity extends BridgeActivity {
     addContentView(reload, params);
   }
 
-  @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    WebView webView = getBridge().getWebView();
-
-    if (keyCode == KeyEvent.KEYCODE_BACK && webView != null && webView.canGoBack()) {
-      webView.goBack();
-      return true;
-    }
-
-    return super.onKeyDown(keyCode, event);
-  }
 }
