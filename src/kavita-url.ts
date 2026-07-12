@@ -61,9 +61,21 @@ export function getNativeAllowedOrigins(env: KavitaEnv): readonly string[] {
 export function assertKavitaUrlAllowedByNativeConfig(rawUrl: string, env: KavitaEnv): string {
   const kavitaUrl = normalizeKavitaUrl(rawUrl);
   const allowedOrigins = getNativeAllowedOrigins(env);
+  const kavitaProtocol = new URL(kavitaUrl).protocol;
+
+  if (kavitaProtocol === 'http:' && env.VITE_KAVITA_URL?.trim()) {
+    const configuredUrl = new URL(normalizeKavitaUrl(env.VITE_KAVITA_URL));
+    if (configuredUrl.protocol !== 'http:' || configuredUrl.origin !== new URL(kavitaUrl).origin) {
+      throw new Error('Kavita URL must match a native host allowed for this app build');
+    }
+  }
+
+  if (kavitaProtocol === 'http:' && !env.VITE_KAVITA_URL?.trim()) {
+    throw new Error('Kavita URL must use https:// for this app build');
+  }
 
   if (!allowedOrigins.length) {
-    return kavitaUrl;
+    throw new Error('Kavita URL must match a native host allowed for this app build');
   }
 
   if (allowedOrigins.includes('*')) {

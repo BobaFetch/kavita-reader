@@ -6,7 +6,7 @@ describe('Capacitor config', () => {
     expect(config.server).not.toHaveProperty('url');
   });
 
-  it('defaults to wildcard native navigation for runtime-configured Kavita URLs', () => {
-    expect(config.server?.allowNavigation).toEqual(['*']);
+  it('does not default to wildcard native navigation without explicit opt-in', () => {
+    expect(config.server?.allowNavigation).toEqual([]);
   });
 });

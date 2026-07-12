@@ -3,9 +3,7 @@
 	"appName": "Kavita Mobile Shell",
 	"webDir": "dist",
 	"server": {
-		"allowNavigation": [
-			"*"
-		],
+		"allowNavigation": [],
 		"cleartext": false
 	},
 	"ios": {
