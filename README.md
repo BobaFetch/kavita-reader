@@ -53,6 +53,8 @@ npm run cap:sync
 
 ## Android / Boox
 
+Android uses the system Back button to navigate backward inside the Kavita WebView before exiting the app. A small floating Reload button appears at the bottom-right of the app and reloads the current Kavita page.
+
 Build a debug APK from `android/` using Android Studio's bundled JBR:
 
 ```sh
@@ -80,6 +82,8 @@ Launch the app activity:
 Boox is Android v1 for this project.
 
 ## iOS
+
+iOS shows a bottom toolbar with Back and Reload controls for the Kavita WebView.
 
 Open the iOS project in Xcode:
 
