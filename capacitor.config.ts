@@ -13,13 +13,14 @@ const extraNavigationHosts = process.env.VITE_CAPACITOR_ALLOW_NAVIGATION
 const allowNavigation = [parsedKavitaUrl?.hostname, ...extraNavigationHosts].filter(
   (host): host is string => Boolean(host),
 );
+const runtimeAllowNavigation = allowNavigation.length ? allowNavigation : ['*'];
 
 const config: CapacitorConfig = {
   appId: 'local.kavita.mobile.shell',
   appName: 'Kavita Mobile Shell',
   webDir: 'dist',
   server: {
-    allowNavigation,
+    allowNavigation: runtimeAllowNavigation,
     cleartext: parsedKavitaUrl?.protocol === 'http:',
   },
   ios: {

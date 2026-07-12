@@ -4,8 +4,7 @@
 	"webDir": "dist",
 	"server": {
 		"allowNavigation": [
-			"kavita-library.example.dev",
-			"example.cloudflareaccess.com"
+			"*"
 		],
 		"cleartext": false
 	},
