@@ -4,10 +4,16 @@ export type KavitaEnv = {
 };
 
 export function normalizeKavitaUrl(rawUrl: string | undefined): string {
-  const trimmedUrl = rawUrl?.trim();
+  let trimmedUrl = rawUrl?.trim();
 
   if (!trimmedUrl) {
     throw new Error('Kavita URL is required');
+  }
+
+  trimmedUrl = trimmedUrl.replace(/^(https?)\/\//i, '$1://');
+
+  if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(trimmedUrl)) {
+    trimmedUrl = `https://${trimmedUrl}`;
   }
 
   let parsedUrl: URL;
