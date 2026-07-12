@@ -36,6 +36,11 @@ export function getNativeAllowedOrigins(env: KavitaEnv): readonly string[] {
     .map((host) => host.trim())
     .filter(Boolean)
     .forEach((host) => {
+      if (host === '*') {
+        origins.add(host);
+        return;
+      }
+
       if (host.startsWith('http://') || host.startsWith('https://')) {
         origins.add(new URL(host).origin);
         return;
@@ -52,6 +57,10 @@ export function assertKavitaUrlAllowedByNativeConfig(rawUrl: string, env: Kavita
   const allowedOrigins = getNativeAllowedOrigins(env);
 
   if (!allowedOrigins.length) {
+    return kavitaUrl;
+  }
+
+  if (allowedOrigins.includes('*')) {
     return kavitaUrl;
   }
 

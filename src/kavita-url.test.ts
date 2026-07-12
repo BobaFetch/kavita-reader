@@ -47,6 +47,12 @@ describe('assertKavitaUrlAllowedByNativeConfig', () => {
       VITE_KAVITA_URL: 'http://kavita.example.com/',
     })).toBe('http://kavita.example.com');
   });
+
+  it('allows any normalized URL when native navigation uses a wildcard host mask', () => {
+    expect(assertKavitaUrlAllowedByNativeConfig('https://reader.example.net/', {
+      VITE_CAPACITOR_ALLOW_NAVIGATION: '*',
+    })).toBe('https://reader.example.net');
+  });
 });
 
 describe('getNativeAllowedOrigins', () => {
@@ -54,6 +60,10 @@ describe('getNativeAllowedOrigins', () => {
     expect(getNativeAllowedOrigins({
       VITE_CAPACITOR_ALLOW_NAVIGATION: 'kavita.example.com/, files.example.com/library',
     })).toEqual(['https://kavita.example.com', 'https://files.example.com']);
+  });
+
+  it('preserves wildcard host masks', () => {
+    expect(getNativeAllowedOrigins({ VITE_CAPACITOR_ALLOW_NAVIGATION: '*' })).toEqual(['*']);
   });
 });
 
